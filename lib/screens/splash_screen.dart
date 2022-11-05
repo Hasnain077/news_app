@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:animation_wrappers/animation_wrappers.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/controller/common_controller.dart';
+import 'package:news_app/screens/introduction_screen.dart';
 import 'package:news_app/screens/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
+
   const SplashScreen({Key? key}) : super(key: key);
 
   @override
@@ -12,21 +15,23 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  void moveToNextPage() {
-    print("Hello");
 
-    //unnamed route
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (c) => const LoginScreen(),
-        ));
+  void moveToNextPage() async {
+    bool isOld = await CommonController().getInstroductionPref();
+    if (mounted) {
+      //unnamed route
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (c) => isOld ? const LoginScreen(): const IntroductionScreen(),
+          ));
+    }
   }
 
   @override
   void initState() {
     print("Hi");
-    Timer(const Duration(seconds: 2), moveToNextPage);
+    Timer(const Duration(seconds: 3), moveToNextPage);
     super.initState();
   }
 

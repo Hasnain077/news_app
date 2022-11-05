@@ -1,6 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/components/auth_component.dart';
 import 'package:news_app/components/text_component.dart';
 import 'package:news_app/controller/auth_controller.dart';
 
@@ -105,115 +106,33 @@ final TextEditingController _passwordController = TextEditingController();
                 const SizedBox(
                   height: 20,
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                   String name = _nameController.text.trim();
-                   String email = _nameController.text.trim();
-                   String password=  _passwordController.text;
-                   if(name.isEmpty || email.isEmpty || password.isEmpty){
-                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please fill the required field')));
-                     return;
-                   }
-                   final User? user = await AuthController(context).createAccount(name:name, email:email, password:password );
-                   if (user == null && mounted){
-                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error Unable to create account')));
-                     return;
-                   }
-                   if (mounted){
-                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(user?.email ?? "")));   //ask
-                   }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepOrange.shade500,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      child: Text("Sign Up"),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "OR",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue.shade900,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            child: Text(
-                              "Facebook",
-                              style: TextStyle(fontFamily: "fb", fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue.shade500,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            child: Text(
-                              "Twitter",
-                              style: TextStyle(fontFamily: "twitter", fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const TextComp(text: "Already have an account?"),
-                GestureDetector(
-                  onTap: () {
+                AuthComponent(
+                  primaryText: "SignUP",
+                onPrimaryClick: ()async {
+                  String name = _nameController.text.trim();
+                  String email = _emailController.text.trim();
+                  String password = _passwordController.text;
+                  if (name.isEmpty || email.isEmpty || password.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please fill the required field")));
+                    return;
+                  }
+
+                  final User? user = await AuthController(context).createAccount(name: name, email: email, password: password);
+                  if (user == null && mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Error: Unable to create account")));
+                    return;
+                  }
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(user?.email ?? "")));
+                  }
+                },
+                  primaryButtonColor: Colors.orange.shade500,
+                  lintText: "Login",
+                  secondaryText: "Already have an account?",
+                  onLinkTextClick: (){
                     Navigator.pop(context);
                   },
-                  child: const Align(
-                    child: Text(
-                      "Login",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
+
                 ),
               ],
             ),

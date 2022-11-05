@@ -1,7 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:news_app/components/walkthrough_component.dart';
+import 'package:news_app/controller/common_controller.dart';
+import 'package:news_app/screens/login_screen.dart';
 
 class IntroductionScreen extends StatefulWidget {
   const IntroductionScreen({Key? key}) : super(key: key);
@@ -11,7 +11,7 @@ class IntroductionScreen extends StatefulWidget {
 }
 
 class _IntroductionScreenState extends State<IntroductionScreen> {
-  final list = [
+  final list = const [
     WalkThroughComponent(
         text: "Where News Come First",
         assets: "assets/bbc.jpg",
@@ -26,41 +26,98 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         secondaryText: 'More News. More Often')
   ];
   int selectedIndex = 0;
-
+  final PageController _pageController = PageController(initialPage: 0);
+void getToLogin() async{
+  await CommonController().setIntroductionPref();
+  if(mounted) {
+    Navigator.pushReplacement(context,MaterialPageRoute(builder: (c) => const LoginScreen(),) );
+  }
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: indicator(),
+      bottomNavigationBar: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: TextButton(onPressed: () {
+                getToLogin();
+              }, child: const Text('Skip')),
+            ),
+            indicator(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 50,
+                width: 50,
+                child: ElevatedButton(
+                    onPressed: () {
+
+                      if (selectedIndex == list.length-1) {
+                        getToLogin();
+                      } else {
+                        selectedIndex++;
+                        _pageController.animateToPage(
+                          selectedIndex,
+                          duration: const Duration(microseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                        setState(() {});
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      )
+                    ),
+                    child: Center(
+                      child: Icon(
+                        selectedIndex == list.length - 1
+                            ? Icons.check
+                            : Icons.arrow_forward,
+                      ),
+                    )),
+              ),
+            ),
+          ],
+        ),
+      ),
       body: Container(
         height: double.maxFinite,
         width: double.maxFinite,
+
         child: PageView(
+          controller: _pageController,
           children: list,
           onPageChanged: (index) {
-            print(index);
-            selectedIndex = index;
-            setState(() {
 
-            });
+            selectedIndex = index;
+            setState(() {});
           },
         ),
       ),
     );
   }
 
-  Widget indicator(){
+  Widget indicator() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(list.length, (index) {
-        return Container(
-
-          height: 20,
-          width: 20,
-          color: selectedIndex==index? Colors.deepOrange : Colors.green,
+        return Padding(
+          padding: const EdgeInsets.all(4),
+          child: AnimatedContainer(
+            duration: const Duration(microseconds: 300),
+            height: selectedIndex == index ? 20 : 10,
+            width: selectedIndex == index ? 20 : 10,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: Colors.blue,
+            ),
+          ),
         );
       }),
-
     );
-
   }
 }

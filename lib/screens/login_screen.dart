@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/components/auth_component.dart';
+import 'package:news_app/components/primary_button_component.dart';
 import 'package:news_app/components/text_component.dart';
 import 'package:news_app/screens/signup_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -100,112 +102,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    // print(_emailController.text);
-                    try {
-                      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                          email: "",
-                          password: "",
-                      );
-                    } on FirebaseAuthException catch (e) {
-                      if (e.code == 'user-not-found') {
-                        print('No user found for that email.');
-                      } else if (e.code == 'wrong-password') {
-                        print('Wrong password provided for that user.');
-                      }
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepOrange.shade500,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: const Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      child: Text("Log In"),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "OR",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue.shade900,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            child: Text(
-                              "Facebook",
-                              style: TextStyle(fontFamily: "fb", fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue.shade500,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Center(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 12),
-                            child: Text(
-                              "Twitter",
-                              style: TextStyle(fontFamily: "twitter", fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const TextComp(text: "Don't you have an account?"),
-                GestureDetector(
-                  onTap: () => Navigator.push(context, MaterialPageRoute(builder: (c) => const SignUpScreen())),
-                  child: const Align(
-                    child: Text(
-                      "Create New",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ),
-                ),
+              AuthComponent(
+                primaryText: 'Login',
+
+                onPrimaryClick: (){},
+                secondaryText: "Don't you have an account?",
+                lintText: "Create New",
+                onLinkTextClick: (){
+                  Navigator.push(context,MaterialPageRoute(builder: (c)=> const SignUpScreen()));
+                },
+              ),
+
               ],
             ),
           ),
